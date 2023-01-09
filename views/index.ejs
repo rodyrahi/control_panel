@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+  <body>
+    <form id="form">
+      <label for="appName">password:</label><br>
+      <input type="password" id="password" name="password"><br>
+      <label for="appName">PM2 App Name:</label><br>
+      <input type="text" id="appName" name="appName"><br>
+      <button type="button" id="restartButton">Restart App</button>
+      <button type="button" id="stopButton">Stop App</button>
+      <button type="button" id="deleteButton">Delete App</button>
+      <button type="button" id="restartMysqlButton">Restart MySQL</button>
+      <button type="button" id="gitpull">Git Pull</button>
+    </form> 
+
+
+
+
+
+
+    <script>
+      const form = document.getElementById('form');
+      const appNameInput = form.elements.appName;
+      const passwordInput = form.elements.password;
+
+
+      document.getElementById('restartButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/restart_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password }));
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+      });
+
+      document.getElementById('stopButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/stop_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password}));
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+      });
+
+      document.getElementById('deleteButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/delete_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password }));
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+      });
+
+      document.getElementById('restartMysqlButton').addEventListener('click', function() {
+        const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/restart_mysql');
+        xhr.send(JSON.stringify({ password }));
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+      });
+        document.getElementById('gitpull').addEventListener('click', function() {
+          const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/git_pull');
+        xhr.send(JSON.stringify({ password }));
+        xhr.onload = function() {
+          console.log(xhr.responseText);
+        };
+      
+      });
+    </script>
+  </body>
+</html>
