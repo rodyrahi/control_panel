@@ -83,9 +83,26 @@ app.post('/restart_mysql', function(req, res) {
   });
 });
 
+app.post('/nginxrestart', function(req, res) {
+  const sshClient = new NodeSSH();
+  const password = req.body.password;
+
+  sshClient.connect({
+    host: '165.232.151.6',
+    username: 'root',
+    password: password
+  }).then(() => {
+    sshClient.execCommand(`systemctl restart nginx`).then(output => {
+      sshClient.dispose();
+      res.send(output.stdout);
+    });
+  });
+});
+
 app.post('/git_pull', function(req, res) {
   const appName = req.body.appName;
   const password = req.body.password;
+  const apppath = req.body.apppath;
 
   const sshClient = new NodeSSH();
 
@@ -95,7 +112,7 @@ app.post('/git_pull', function(req, res) {
     password: password
   }).then(() => {
     // Run all commands in sequence
-    return sshClient.execCommand(`cd app/whatsappapi && git pull && pm2 delete ${appName}`)
+    return sshClient.execCommand(`cd app/${apppath} && git pull && pm2 delete ${appName}`)
   }).then(output => {
     // Dispose of the SSH client and send the command output as the response
     sshClient.dispose();

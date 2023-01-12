@@ -1,10 +1,143 @@
-
 <!DOCTYPE html>
 <html>
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="container w-50">
+    <form id="form">
+      <div class="form-group">
+        <label for="input1">Path</label>
+        <input type="text" class="form-control" id="apppath" name="apppath">
+      </div>
+      <div class="form-group">
+        <label for="input2">APP</label>
+        <input type="text" class="form-control" id="appName" name="appName">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" name="password">
+      </div>
+      <br>
+      <div class="form-group">
+        <button type="button" class="btn btn-primary m-1" id="restartButton">Restart App</button>
+        <button type="button" class="btn btn-danger m-1" id="stopButton" >Stop App</button>
+        <button type="button" class="btn btn-danger m-1" id="deleteButton">Delete App</button>
+        <button type="button" class="btn btn-warning m-1"id="restartMysqlButton">Restart MySQL</button>
+        <button type="button" class="btn btn-info m-1" id="gitpull">Gitpull</button>
+        <button type="button" class="btn btn-warning" id="restartnginx">Restart Nginx</button>
+      </div>
+      </form>
+      
+
+    </div>
+    <div class="container">
+      <br>
+      <hr>
+      <div><p class="text-break" id="response">logs are here! :)</p></div>
+    </div>
+
+
+    <script>
+      const form = document.getElementById('form');
+      const appNameInput = form.elements.appName;
+      const passwordInput = form.elements.password;
+
+
+      document.getElementById('restartButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+        
+
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/restart_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password }));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      });
+
+      document.getElementById('stopButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/stop_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password}));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      });
+
+      document.getElementById('deleteButton').addEventListener('click', function() {
+        const appName = appNameInput.value;
+        const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/delete_app');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ appName , password }));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      });
+
+      document.getElementById('restartMysqlButton').addEventListener('click', function() {
+        const password = passwordInput.value;
+       
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/restart_mysql');
+        xhr.send(JSON.stringify({ password }));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      });
+        document.getElementById('gitpull').addEventListener('click', function() {
+          const password = passwordInput.value;
+          const apppath = apppath.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/git_pull');
+        xhr.send(JSON.stringify({ password  , apppath}));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      
+      });
+      document.getElementById('restartnginx').addEventListener('click', function() {
+          const password = passwordInput.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/nginxrestart');
+        xhr.send(JSON.stringify({ password }));
+        xhr.onload = function() {
+          document.getElementById('response').innerHTML = xhr.responseText;
+        };
+      
+      });
+    </script>
+  </body>
+</html>
+
+
+<!-- <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/dist/output.css" rel="stylesheet">
+  <title>Document</title>
+</head>
+<body>
   <body>
     <form id="form">
       <label for="appName">password:</label><br>
-      <input type="password" id="password" name="password"><br>
+      <input class="rounded text-pink-500" type="password" id="password" name="password"><br>
       <label for="appName">PM2 App Name:</label><br>
       <input type="text" id="appName" name="appName"><br>
       <button type="button" id="restartButton">Restart App</button>
@@ -13,11 +146,6 @@
       <button type="button" id="restartMysqlButton">Restart MySQL</button>
       <button type="button" id="gitpull">Git Pull</button>
     </form> 
-
-
-
-
-
 
     <script>
       const form = document.getElementById('form');
@@ -86,4 +214,6 @@
       });
     </script>
   </body>
-</html>
+</body>
+</html> -->
+
